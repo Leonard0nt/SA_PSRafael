@@ -1,0 +1,113 @@
+{% extends 'administradorTemplates/adminBase.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<script src="{% static 'staticAdmin/cliente.js' %}"></script>
+
+<div class="bg-secondary vh-110 d-flex justify-content-center align-items-center">
+    <div class="bg-white p-5 mb-5 mt-5 shadow-sm" style="width: 90%; height: 100%;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><h1>Clientes</h1></th>
+                    <th><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator-fill mb-3" viewBox="0 0 16 16" style="float: left;" >
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                      </svg></th>
+                    <th></th>
+                    <th></th>   
+                    <th>
+                        <a href="javascript:void(0);" class="btn btn-primary" id="openModalBtn" style="float: right;" onclick="openAddModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                                <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                            </svg>
+                            Agregar
+                        </a>
+                    </th>
+                </tr>  
+
+                <tr>
+                    <th>Rut</th>
+                    <th>Nombre completo</th>
+                    <th>Direccion</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.rut }}</td>
+                    <td>{{ cliente.nombres }} {{cliente.apellidos}}</td>
+                    <td>{{ cliente.direccion }}</td>
+                    <td>{{ cliente.telefono }}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="btn btn-warning" onclick="openEditClienteModal('{{ cliente.rut }}')">Editar</a>
+                        <a href="{% url 'eliminar_cliente' cliente.rut %}" style="float: right;"  class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente ?')">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No hay contadores registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- El modal que contiene el formulario -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        
+        <h1>Agregar Cliente</h1>
+
+        {% if messages %}
+        <div id="error-message" class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+            <strong>Error:</strong> {{ message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        
+        <form class="form-control" id="formContador" method="POST" action="{% url 'crear_cliente' %}">
+            <table>
+                {% csrf_token %}
+                {{ form.as_table }}
+            </table>
+            <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+        </form>
+    </div>
+</div>
+
+<!-- El modal para editar el contador -->
+<div id="editModalCliente" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-btn" id="closeEditModalBtnCliente">&times;</span>
+        
+        <h1>Editar Cliente</h1>
+
+        <form id="formEditCliente" method="POST" action="">
+            {% csrf_token %}
+            <label for="nombres">Nombres:</label>
+            <input type="text" id="nombres" name="nombres" class="form-control" required><br>
+            
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" class="form-control" required><br>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" class="form-control" required><br>
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" required><br>
+
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

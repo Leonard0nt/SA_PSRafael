@@ -1,0 +1,71 @@
+html,
+body {
+  height: 100%;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  /* #f5f5f5 */
+}
+
+
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  margin: auto;
+  padding: 15px;
+  border: 1px solid #ccc; /* Establece el borde original */
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Ajustar el borde con una reducción del 20% */
+.form-signin {
+  border-width: calc(1px - 20%);
+}
+
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-signin .checkbox {
+  font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.form-signin input[type="text"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.btn-texto {
+  background: none; /* Sin fondo */
+  color: #007bff; /* Azul */
+  border: none; /* Sin borde */
+  cursor: pointer; /* Indicador de clic */
+}
+
+
+
+
+

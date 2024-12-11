@@ -1,0 +1,110 @@
+/* Cargar el contenido de la página */
+body {
+    transition: background-color 0.3s ease;
+}
+
+/* Oscurecer el fondo cuando el menú se muestra */
+.backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040; /* Detrás del menú emergente */
+    transition: opacity 0.3s ease;
+}
+
+/* Estilo para el menú emergente (navbar) */
+.navbar-collapse {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px; /* Ancho del menú */
+    height: 100vh; /* La altura es 100% de la pantalla */
+    background-color: #343a40; /* Fondo oscuro */
+    z-index: 1050; /* Delante de la capa de fondo */
+    transform: translateX(100%); /* El menú comienza fuera de la pantalla hacia la derecha */
+    transition: transform 0.5s ease-in-out; /* Transición suave */
+    display: flex;
+}
+
+
+
+/* Cuando el menú se muestra, se desliza hacia adentro */
+.navbar-collapse.show {
+    transform: translateX(0);
+    height: 100vh; /* Hace que ocupe toda la altura de la pantalla */
+}
+
+/* Estilo de los enlaces en el menú */
+.navbar-nav li a {
+    color: white !important;
+    padding: 10px 15px;
+}
+
+/* Asegurar que el fondo oscurecido se muestra correctamente */
+.backdrop.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Asegurar que el cuerpo no se mueva cuando el menú está abierto */
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Flexbox en la lista de navegación */
+.navbar-nav {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Esto hace que el contenedor ocupe toda la altura disponible */
+    justify-content: flex-start; /* Asegura que los elementos estén alineados al principio */
+}
+
+/* Empujar "Cerrar sesión" hacia abajo */
+.navbar-nav ul {
+    margin-top: auto; /* Esto empuja el último elemento hacia la parte inferior */
+}
+
+/* Modal (por defecto, oculto) */
+.modal {
+  display: none; /* El modal estará oculto por defecto */
+  position: fixed; /* Fijo en la pantalla */
+  z-index: 1051; /* Asegúrate de que el modal esté encima de otros elementos */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente */
+}
+
+/* Contenido del modal */
+.modal-content {
+  background-color: #fefefe;
+  margin: 7% auto; /* Centrado vertical y horizontal */
+  padding: 10px;
+  border: 1px solid #888;
+  width: 80%; /* Puedes cambiar el tamaño */
+}
+
+/* Estilo del botón de cierre */
+.close-btn {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px; /* Ajusta la distancia desde la parte superior */
+  right: 20px; /* Alinea el botón a la izquierda */
+  cursor: pointer;
+}
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
