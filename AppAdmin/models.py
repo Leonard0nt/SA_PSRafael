@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser, UserManager
 
 
 
+
 ## Cavalas (puestos)
 class Cavalas(models.Model):
     idCavala = models.IntegerField(null=False, primary_key=True)
@@ -22,22 +23,11 @@ class Cavalas(models.Model):
 
 ## User
 class UserManager(UserManager):
-    def create_user(self, rut, passwordLec=None, **extra_fields):
-        if not rut:
-            raise ValueError('El rut es obligatorio')
-
-        # Asignamos el rut como username
-        user = self.model(rut=rut, username=rut, **extra_fields)
-
-        if passwordLec:
-            user.set_password(passwordLec)
-
-        user.save(using=self._db)
+    def create_user(self, rut, passwordLec):
+        user = self.model(rut=rut, username=rut)
+        user.set_password(passwordLec)
+        user.save()
         return user
-    
-   
-
-
 
 class User(AbstractUser):
     TIPO_USUARIO_CHOICES = [
@@ -59,24 +49,22 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    def create_superuser(self, rut, passwordLec=None, **extra_fields):
+        """
+        Crea y devuelve un superusuario con el rut proporcionado.
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
 
-    def save(self, *args, **kwargs):
-        # Asignamos rut a username y nombres, apellidos a first_name, last_name
-        if not self.username:
-            self.username = self.rut  # Asigna 'rut' al campo 'username'
-        if not self.first_name:
-            self.first_name = self.nombres  # Asigna 'nombres' a 'first_name'
-        if not self.last_name:
-            self.last_name = self.apellidos  # Asigna 'apellidos' a 'last_name'
-        if self.password:  # Si la contraseña es nueva o modificada
-            self.set_password(self.password)  # Cifra la contraseña antes de guardar
-        if self.tipo_usuario == "contador" or self.tipo_usuario == 'cabalero' or self.tipo_usuario == 'admin':
-            self.is_staff = True
-        super().save(*args, **kwargs)
+        if passwordLec is None:
+            raise ValueError('El superusuario debe tener una contraseña')
 
+        return self.create_user(rut, passwordLec, **extra_fields)
 
     def __str__(self) -> str:
         return f"{self.nombres} {self.apellidos}"
+    
+
     
 
 

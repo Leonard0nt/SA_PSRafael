@@ -5,8 +5,8 @@ from forms.adminForms import ClienteForm, ContadorForm, CabaleroForm, CavalaForm
 from AppAdmin.models import *
 from django.http import JsonResponse
 from datetime import datetime
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 
 
 # Vista para el inicio del administrador
@@ -33,28 +33,27 @@ def homeAdministrador(request):
 
 # Vista de inicio de sesión personalizada
 
-def custom_login_view(request):
-    if request.method == 'POST':
-        form = CustomAuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()  # Obtén el usuario autenticado del formulario
-            login(request, user)  # Autentica al usuario y lo guarda en la sesión
-              # Redirige al usuario a la página de inicio o dashboard
-    else:
-        form = CustomAuthenticationForm()
-
-    return render(request, 'login/login.html', {'form': form})
+def login(request):
+    return render(request, 'login/login.html', {'form': LoginView.form_class()})
 
 class CustomLoginView(LoginView):
-    template_name = 'login/login.html'
-    authentication_form = CustomAuthenticationForm  # Utiliza tu formulario personalizado
+    template_name = 'login/login.html'  # Ajusta según tu estructura de carpetas
+    success_url = reverse_lazy('/')  # Ajusta según tu URL de redirección exitosa
 
     def get_success_url(self):
-        """Define la URL de redirección después del login exitoso"""
-        if self.request.user.is_superuser:
-            return '/administrador/'  # Redirige al panel de administración
-        else:
-            return '/cliente/'  # Redirige a la sección del cliente
+        # Verifica si el usuario es administrador y redirige en consecuencia
+        if self.request.user.is_authenticated:
+            if self.request.user.is_staff:
+                return '/administrador/'  # Ajusta según tu URL de administrador
+            else:
+                return '/cliente/'  # Ajusta según tu URL de voluntario
+        return '/'
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if not any(message.tags == messages.ERROR for message in messages.get_messages(self.request)):
+            messages.error(self.request, 'Credenciales incorrectas. Por favor, inténtalo de nuevo.')  # Mensaje de error
+        return response
 
 
 # Vistas relacionadas con contadores

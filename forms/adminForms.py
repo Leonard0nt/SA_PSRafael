@@ -35,6 +35,20 @@ class ClienteForm(UserFormBase):
         self.fields['tipo_usuario'].required = False
         self.fields['tipo_usuario'].widget = forms.HiddenInput()
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.username = self.cleaned_data['rut']  # Establece el username como el rut
+
+         # Establece la contraseña utilizando set_password
+        password = self.cleaned_data.get('password')
+        user.set_password(password)
+
+        user.rut = self.cleaned_data['rut'].replace(".", "")
+        
+        if commit:
+            user.save()
+        return user
+
 
 
 class ContadorForm(UserFormBase):
