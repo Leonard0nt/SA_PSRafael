@@ -237,7 +237,7 @@ def obtener_cabala(request, idCavala):
 def editar_cabala(request, idCavala):
     cabala = get_object_or_404(Cavalas, idCavala=idCavala)
     if request.method == 'POST':
-        cabala.sectorCavala = request.POST.get('sectorCavala')
+        cabala.sectorCavala = request.POST.get('sector')
         cabala.save()
         messages.success(request, 'Cabala actualizada correctamente.')
         return redirect('vAdm_cabalas')
@@ -304,6 +304,5 @@ def editar_cliente(request, cliente_rut):
         cliente.telefono = request.POST.get('telefono')
         cliente.direccion = request.POST.get('direccion')
         cliente.save()
-        messages.success(request, 'Cliente actualizado correctamente.')
         return redirect('vAdm_clientes')
 

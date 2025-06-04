@@ -4,7 +4,6 @@
 
 {% block content %}
 
-<script src="{% static 'staticAdmin/cabala.js' %}"></script>
 
 <div class="bg-secondary vh-110 d-flex justify-content-center align-items-center">
     <div class="bg-white p-5 mb-5 mt-5 shadow-sm" style="width: 90%; height: 100%;">
@@ -51,7 +50,7 @@
                     <td></td>
 
                     <td>
-                        <a href="javascript:void(0);" class="btn btn-warning" onclick="openEditCabalaModal('{{ cabala.idCavala }}', '{{ cabala.sectorCavala }}')">Editar</a>
+                        <a href="javascript:void(0);" class="btn btn-warning" onclick="openEditCabalaModal('{{ cabala.idCavala }}')">Editar</a>
                         <a href="{% url 'eliminar_cabala' cabala.idCavala %}" style="float: right;"  class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta cavala?')">Eliminar</a>
                     </td>
                 </tr>
@@ -62,6 +61,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
     </div>
 </div>
 
@@ -107,5 +107,9 @@
         </form>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
+<script src="{% static 'staticAdmin/cabala.js' %}"></script>
+
 
 {% endblock %}
